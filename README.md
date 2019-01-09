@@ -1,6 +1,6 @@
 # GDPR Dump
 
-A drop-in replacement for mysqldump that optionally sanitizes DB fields for better GDPR conformity.
+A drop-in replacement for drush sql-dump that optionally sanitizes DB fields for better GDPR conformity.
 
 It is based on the [machbarmacher/gdpr-dump](https://github.com/machbarmacher/gdpr-dump) library, 
 and can in principle dump any database that PDO supports. 
