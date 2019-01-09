@@ -11,13 +11,7 @@
       "homepage": "https://github.com/robiningelbrecht",
       "role": "Maintainer"
     }
-  ],
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://packages.drupal.org/8"
-    }
-  ],
+  ]
   "require": {
     "machbarmacher/gdpr-dump": "*"
   }
