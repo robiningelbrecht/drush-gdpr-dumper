@@ -1,4 +1,4 @@
-# GDPR Dump
+# Drush GDPR Dumper
 
 A drop-in replacement for drush sql-dump that optionally sanitizes DB fields for better GDPR conformity.
 
