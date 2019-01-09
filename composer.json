@@ -11,7 +11,7 @@
       "homepage": "https://github.com/robiningelbrecht",
       "role": "Maintainer"
     }
-  ]
+  ],
   "require": {
     "machbarmacher/gdpr-dump": "*"
   }
