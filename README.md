@@ -25,7 +25,7 @@ you are fully GDPR compliant YO!
 
 ## Configuration
 
-This module can be configured by editing the `gdpr_dumper.settings.yml` [file](https://gitlab.com/entityone/drupal8-modules/gdpr-dumper/blob/master/config/install/gdpr_dumper.settings.yml).
+This module can be configured by editing the `gdpr_dumper.settings.yml` [file](https://github.com/robiningelbrecht/gdpr-dumper/blob/master/config/install/gdpr_dumper.settings.yml).
 
 [machbarmacher/gdpr-dump](https://github.com/machbarmacher/gdpr-dump) contains more info about 
 the **gdpr-expressions** and **gdpr-replacement** options. 
