@@ -1,5 +1,5 @@
 {
-  "name": "robiningelbrecht/gdpr-dumper",
+  "name": "drupal/gdpr_dumper",
   "description": "A drop-in replacement for mysqldump that optionally sanitizes DB fields for better GDPR conformity.",
   "type": "drupal-module",
   "license": "GPL-2.0+",
@@ -10,6 +10,12 @@
       "name": "Robin Ingelbrecht",
       "homepage": "https://github.com/robiningelbrecht",
       "role": "Maintainer"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
     }
   ],
   "require": {
