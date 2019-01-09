@@ -10,7 +10,6 @@ use Drupal\Console\Core\Utils\DrupalFinder;
  */
 trait GdprSqlTrait {
 
-  protected $gdprExpressions;
   protected $driverOptions;
 
   /**
@@ -28,20 +27,6 @@ trait GdprSqlTrait {
     }
 
     return $cmd;
-  }
-
-  /**
-   * @return array
-   */
-  public function getGdprExpressions() {
-    return $this->gdprExpressions;
-  }
-
-  /**
-   * @param array $expressions
-   */
-  public function setGdprExpressions(array $expressions) {
-    $this->gdprExpressions = $expressions;
   }
 
   /**
