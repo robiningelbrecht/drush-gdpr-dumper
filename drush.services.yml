@@ -1,0 +1,5 @@
+services:
+  gdpr_dumper.command:
+    class: Drupal\gdpr_dumper\Commands\SqlCommands
+    tags:
+      -  { name: drush.command }
