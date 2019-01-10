@@ -72,6 +72,30 @@ class GdprDumperSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Manage tables and columns that contain sensitive data'),
     ];
 
+    $tables_to_add = array_diff(array_keys($database_tables), array_keys($replacements));
+
+    $form['table'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Select table'),
+      '#title_display' => 'invisible',
+      '#options' => array_combine($tables_to_add, $tables_to_add),
+      '#empty_value' => '',
+      '#empty_option' => $this->t('- Select -'),
+    ];
+
+    $form['add_table'] = [
+      'actions' => [
+        '#type' => 'actions',
+        'submit' => [
+          '#type' => 'submit',
+          '#value' => $this->t('Add table'),
+          '#submit' => [
+            [$this, 'submitAddTable']
+          ],
+        ],
+      ],
+    ];
+
     $form['advanced'] = [
       '#type' => 'vertical_tabs',
     ];
@@ -100,30 +124,26 @@ class GdprDumperSettingsForm extends ConfigFormBase {
           //'#title' => $schema_handles_db_comments ? $db_schema->getComment($table) : NULL,
         ];
 
-        foreach ($columns as $column => $row) {
-          if (isset($database_tables[$table][$column])) {
-            $column_info = $database_tables[$table][$column];
-
-            $form['replacements'][$table]['columns'][$column]['field'] = [
-              '#markup' => '<strong>' . $column_info['COLUMN_NAME'] . '</strong>',
-            ];
-            $form['replacements'][$table]['columns'][$column]['data_type'] = [
-              '#markup' => '<strong>' . $column_info['DATA_TYPE'] . '</strong>',
-            ];
-            $form['replacements'][$table]['columns'][$column]['comment'] = [
-              '#markup' => '<strong>' . (empty($column_info['COLUMN_COMMENT']) ? '-' : $column_info['COLUMN_COMMENT']) . '</strong>',
-            ];
-            $form['replacements'][$table]['columns'][$column]['anonymization'] = [
-              '#type' => 'select',
-              '#title' => $this->t('Apply anonymization'),
-              '#title_display' => 'invisible',
-              '#options' => GdprDumperEnums::fakerFormatters(),
-              '#empty_value' => '',
-              '#empty_option' => $this->t('- No -'),
-              '#required' => FALSE,
-              '#default_value' => $row['formatter'],
-            ];
-          }
+        foreach ($database_tables[$table] as $column_name => $column_properties) {
+          $form['replacements'][$table]['columns'][$column_name]['field'] = [
+            '#markup' => '<strong>' . $column_properties['COLUMN_NAME'] . '</strong>',
+          ];
+          $form['replacements'][$table]['columns'][$column_name]['data_type'] = [
+            '#markup' => '<strong>' . $column_properties['DATA_TYPE'] . '</strong>',
+          ];
+          $form['replacements'][$table]['columns'][$column_name]['comment'] = [
+            '#markup' => '<strong>' . (empty($column_properties['COLUMN_COMMENT']) ? '-' : $column_properties['COLUMN_COMMENT']) . '</strong>',
+          ];
+          $form['replacements'][$table]['columns'][$column_name]['anonymization'] = [
+            '#type' => 'select',
+            '#title' => $this->t('Apply anonymization'),
+            '#title_display' => 'invisible',
+            '#options' => GdprDumperEnums::fakerFormatters(),
+            '#empty_value' => '',
+            '#empty_option' => $this->t('- No -'),
+            '#required' => FALSE,
+            '#default_value' => isset($replacements[$table][$column_name]['formatter']) ? $replacements[$table][$column_name]['formatter'] : FALSE,
+          ];
         }
 
         $form['replacements'][$table]['empty'] = [
@@ -132,21 +152,52 @@ class GdprDumperSettingsForm extends ConfigFormBase {
           '#button_type' => 'secondary',
         ];
       }
-
-      $form['actions']['add_table'] = [
-        '#type' => 'submit',
-        '#value' => $this->t('Add table'),
-      ];
     }
 
     return parent::buildForm($form, $form_state);
   }
 
   /**
+   * Submit callback to add a table to the list.
+   *
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   */
+  public function submitAddTable(array &$form, FormStateInterface $form_state) {
+    if ($table = $form_state->getValue('table')) {
+      $replacements = $this->settings->get('gdpr_replacements');
+
+      if (!isset($replacements[$table])) {
+        $replacements[$table] = [];
+      }
+
+      // Update config.
+      $this->settings->set('gdpr_replacements', $replacements)->save();
+      $this->messenger()
+        ->addStatus($this->t('The table has been added. You can configure it by selecting the corresponding tab.'));
+    }
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    dpm($form_state->getValues());
+    $settings = [
+      'gdpr_replacements' => [],
+    ];
+
+    $replacements = $form_state->getValue('replacements');
+    // Format the replacement to a suitable config array.
+    foreach ($replacements as $table_name => $properties) {
+      foreach ($properties['columns'] as $column_name => $column) {
+        if (!empty($column['anonymization'])) {
+          $settings['gdpr_replacements'][$table_name][$column_name]['formatter'] = $column['anonymization'];
+        }
+      }
+    }
+
+    // @todo: save settings if driver config is moved out of config file.
+
     parent::submitForm($form, $form_state);
   }
 

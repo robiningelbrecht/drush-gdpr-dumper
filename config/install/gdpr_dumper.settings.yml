@@ -1,3 +1,4 @@
+empty_tables: {}
 gdpr_replacements:
   users_field_data:
     name:
