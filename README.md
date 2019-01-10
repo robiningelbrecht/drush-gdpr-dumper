@@ -25,18 +25,23 @@ be GDPR compliant YO!
 
 ## Configuration
 
-This module can be configured by editing the `gdpr_dumper.settings.yml` [file](https://github.com/robiningelbrecht/gdpr-dumper/blob/master/config/install/gdpr_dumper.settings.yml).
-
-[machbarmacher/gdpr-dump](https://github.com/machbarmacher/gdpr-dump) contains more info about 
-the **gdpr-replacement** options. 
-
-The provided yml file expects the same structure as explained in the readme above.
+This module can be configured by navigating to `admin/config/development/gdpr-dumper`.
+On this page you can configure the sanitization and anonymization 
+of every column of every table in your database.
 
 ## Events
 
 The module dispatches one event:
 * `GdprDumperEvents::GDPR_REPLACEMENTS`
  
-This allows developers to alter the replacements through event subscribers on run-time
+This allows developers to alter the replacements through event subscribers on run-time.
+[machbarmacher/gdpr-dump](https://github.com/machbarmacher/gdpr-dump) contains more info about 
+the **gdpr-replacement** options. 
+
+The provided yml file expects the same structure as explained in the readme above.
+
+## TODO
+
+* Provide a way to allow to only export the structure of a table without the data.
 
 Happy GDPR'ing!
