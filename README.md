@@ -42,6 +42,6 @@ The provided yml file expects the same structure as explained in the readme abov
 
 ## TODO
 
-* Provide a way to allow to only export the structure of a table without the data.
+* Provide a way to allow to export the structure of a table without the data.
 
 Happy GDPR'ing!
