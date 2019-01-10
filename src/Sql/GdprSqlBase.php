@@ -68,7 +68,7 @@ class GdprSqlBase extends SqlBase {
       $event_dispatcher->dispatch(GdprDumperEvents::GDPR_EXPRESSIONS, $event);
       // Add the configured GDPR expressions to the command.
       if($expressions = Json::encode($event->getExpressions())){
-        //$options['extra-dump'] .= " --gdpr-expressions='$expressions'";
+        $options['extra-dump'] .= " --gdpr-expressions='$expressions'";
       }
     }
 
