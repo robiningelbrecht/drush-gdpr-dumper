@@ -28,16 +28,15 @@ you are fully GDPR compliant YO!
 This module can be configured by editing the `gdpr_dumper.settings.yml` [file](https://github.com/robiningelbrecht/gdpr-dumper/blob/master/config/install/gdpr_dumper.settings.yml).
 
 [machbarmacher/gdpr-dump](https://github.com/machbarmacher/gdpr-dump) contains more info about 
-the **gdpr-expressions** and **gdpr-replacement** options. 
+the **gdpr-replacement** options. 
 
 The provided yml file expects the same structure as explained in the readme above.
 
 ## Events
 
-The module dispatches two events:
-* `GdprDumperEvents::GDPR_EXPRESSIONS`
+The module dispatches one event:
 * `GdprDumperEvents::GDPR_REPLACEMENTS`
  
-This allows developers to alter the expressions and replacements through event subscribers on run-time
+This allows developers to alter the replacements through event subscribers on run-time
 
 Happy GDPR'ing!

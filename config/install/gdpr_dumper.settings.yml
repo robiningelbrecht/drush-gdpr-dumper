@@ -1,6 +1,3 @@
-gdpr_expressions:
-  users_field_data:
-    init: 'uid'
 gdpr_replacements:
   users_field_data:
     name:
@@ -9,6 +6,7 @@ gdpr_replacements:
       formatter: 'email'
     pass:
       formatter: 'clear'
+# TODO: move this to enum class.
 drivers:
   mysql:
     dump_command: 'mysqldump'

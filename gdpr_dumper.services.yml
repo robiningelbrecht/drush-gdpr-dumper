@@ -1,0 +1,4 @@
+services:
+  gdpr_dumper.database_manager:
+    class: Drupal\gdpr_dumper\Manager\DatabaseManager
+    arguments: ['@database']
