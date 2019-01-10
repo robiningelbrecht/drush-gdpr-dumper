@@ -63,6 +63,8 @@ class GdprDumperSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $replacements = $this->settings->get('gdpr_replacements');
+    $empty_tables = $this->settings->get('empty_tables');
+
     $database_tables = $this->databaseManager->getTableColumns();
     $db_schema = $this->connection->schema();
     $schema_handles_db_comments = \is_callable([$db_schema, 'getComment']);
@@ -102,26 +104,32 @@ class GdprDumperSettingsForm extends ConfigFormBase {
 
     $form['replacements'] = [
       '#tree' => TRUE,
+      '#attached' => [
+        'library' => ['gdpr_dumper/settings-form']
+      ],
     ];
 
     foreach ($replacements as $table => $columns) {
       if (isset($database_tables[$table])) {
+        $table_summary = $schema_handles_db_comments ? $db_schema->getComment($table) : '-';
         $form['replacements'][$table] = [
           '#type' => 'details',
           '#title' => $table,
           '#group' => 'advanced',
+          '#attributes' => [
+            'data-table-summary' => $table_summary,
+          ],
         ];
 
         $form['replacements'][$table]['columns'] = [
           '#type' => 'table',
+          '#caption' => $table_summary,
           '#header' => [
             ['data' => $this->t('Field')],
             ['data' => $this->t('Type')],
             ['data' => $this->t('Description')],
             ['data' => $this->t('Apply anonymization')],
           ],
-          // @todo: attach this in JS.
-          //'#title' => $schema_handles_db_comments ? $db_schema->getComment($table) : NULL,
         ];
 
         foreach ($database_tables[$table] as $column_name => $column_properties) {
@@ -150,6 +158,7 @@ class GdprDumperSettingsForm extends ConfigFormBase {
           '#type' => 'checkbox',
           '#title' => $this->t('Empty this table'),
           '#button_type' => 'secondary',
+          '#default_value' => isset($empty_tables[$table]) ? $empty_tables[$table] : FALSE,
         ];
       }
     }
@@ -171,6 +180,9 @@ class GdprDumperSettingsForm extends ConfigFormBase {
         $replacements[$table] = [];
       }
 
+      // Order tables alphabetically before saving.
+      ksort($replacements);
+
       // Update config.
       $this->settings->set('gdpr_replacements', $replacements)->save();
       $this->messenger()
@@ -184,6 +196,7 @@ class GdprDumperSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $settings = [
       'gdpr_replacements' => [],
+      'empty_tables' => [],
     ];
 
     $replacements = $form_state->getValue('replacements');
@@ -193,11 +206,13 @@ class GdprDumperSettingsForm extends ConfigFormBase {
         if (!empty($column['anonymization'])) {
           $settings['gdpr_replacements'][$table_name][$column_name]['formatter'] = $column['anonymization'];
         }
-      }
+      };
+      $settings['empty_tables'][$table_name] = $properties['empty'];
     }
 
-    // @todo: order tables alphabetically before saving.
-    // @todo: save settings if driver config is moved out of config file.
+    // Save settings.
+    $this->settings->set('gdpr_replacements', $settings['gdpr_replacements'])
+      ->set('empty_tables', $settings['empty_tables'])->save();
 
     parent::submitForm($form, $form_state);
   }

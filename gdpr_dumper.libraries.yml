@@ -1,0 +1,8 @@
+settings-form:
+  version: 1.x
+  js:
+    js/gdpr-dumper.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal.form
+

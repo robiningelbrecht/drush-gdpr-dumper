@@ -6,6 +6,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Database\Database;
 use Drupal\gdpr_dumper\Event\GdprDumperEvents;
 use Drupal\gdpr_dumper\Event\GdprReplacementsEvent;
+use Drupal\gdpr_dumper\GdprDumperEnums;
 use Drush\Drush;
 use Drush\Sql\SqlBase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -71,10 +72,9 @@ class GdprSqlBase extends SqlBase {
     }
 
     $instance = new $className($dbSpec, $options);
-    $driver_options = isset($config->get('drivers')[$driver]) ? $config->get('drivers')[$driver] : [];
     // Inject config
     $instance->setConfig(Drush::config());
-    $instance->setDriverOptions($driver_options);
+    $instance->setDriverOptions(GdprDumperEnums::driverOptions($driver));
     return $instance;
   }
 

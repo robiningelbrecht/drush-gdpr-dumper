@@ -1,0 +1,5 @@
+gdpr_dumper.settings:
+  title: 'GDPR dumper'
+  description: 'Configure GDPR dumper drush command'
+  parent: system.admin_config_development
+  route_name: gdpr_dumper.settings
