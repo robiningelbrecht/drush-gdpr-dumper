@@ -20,7 +20,7 @@ instead of
 drush sql-dump > file.sql
 ```
 
-`drush sql-dump-gdpr` will automatically strip all GDPR related data from the sql dump to help you get 
+`drush sql-dump-gdpr` will automatically strip all GDPR related data from the sql dump to help you 
 be GDPR compliant YO!
 
 ## Configuration
