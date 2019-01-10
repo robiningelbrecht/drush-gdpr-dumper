@@ -196,6 +196,7 @@ class GdprDumperSettingsForm extends ConfigFormBase {
       }
     }
 
+    // @todo: order tables alphabetically before saving.
     // @todo: save settings if driver config is moved out of config file.
 
     parent::submitForm($form, $form_state);
