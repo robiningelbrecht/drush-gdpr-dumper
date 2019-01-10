@@ -32,4 +32,12 @@ the **gdpr-expressions** and **gdpr-replacement** options.
 
 The provided yml file expects the same structure as explained in the readme above.
 
+## Events
+
+The module dispatches two events:
+* `GdprDumperEvents::GDPR_EXPRESSIONS`
+* `GdprDumperEvents::GDPR_REPLACEMENTS`
+ 
+This allows developers to alter the expressions and replacements through event subscribers on run-time
+
 Happy GDPR'ing!

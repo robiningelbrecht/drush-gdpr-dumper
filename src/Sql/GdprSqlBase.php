@@ -68,19 +68,18 @@ class GdprSqlBase extends SqlBase {
       $event_dispatcher->dispatch(GdprDumperEvents::GDPR_EXPRESSIONS, $event);
       // Add the configured GDPR expressions to the command.
       if($expressions = Json::encode($event->getExpressions())){
-        $options['extra-dump'] .= " --gdpr-expressions='$expressions'";
+        //$options['extra-dump'] .= " --gdpr-expressions='$expressions'";
       }
     }
 
     if (empty($options['extra-dump']) || strpos($options['extra-dump'], '--gdpr-replacements') === FALSE) {
       // Dispatch event so the replacements can be altered.
       $event = new GdprReplacementsEvent($config->get('gdpr_replacements'));
-      $event_dispatcher->dispatch(GdprDumperEvents::GDPR_REPLACEMENTS, new GdprReplacementsEvent($replacements));
+      $event_dispatcher->dispatch(GdprDumperEvents::GDPR_REPLACEMENTS, $event);
       // Add the configured GDPR replacements to the command.
       if($replacements = Json::encode($event->getReplacements())){
         $options['extra-dump'] .= " --gdpr-replacements='$replacements'";
       }
-
     }
 
     $instance = new $className($dbSpec, $options);
