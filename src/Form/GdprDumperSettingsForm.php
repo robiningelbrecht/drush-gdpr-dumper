@@ -64,6 +64,15 @@ class GdprDumperSettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $replacements = $this->settings->get('gdpr_replacements');
     $empty_tables = $this->settings->get('empty_tables');
+    // Add the empty table options to the replacement array, if they don't exist already.
+    // We need this because if only the "Empty table" option is checked,
+    // the table won't be available in the replacements array.
+    foreach (array_filter($empty_tables) as $empty_table => $value) {
+      if (!isset($replacements[$empty_table])) {
+        $replacements[$empty_table] = [];
+      }
+    }
+
 
     $database_tables = $this->databaseManager->getTableColumns();
     $db_schema = $this->connection->schema();
