@@ -1,0 +1,7 @@
+gdpr_dumper.settings:
+  path: '/admin/config/development/gdpr-dumper'
+  defaults:
+    _form: '\Drupal\gdpr_dumper\Form\GdprDumperSettingsForm'
+    _title: 'GDPR dumper'
+  requirements:
+    _permission: 'administer gdpr dumper'

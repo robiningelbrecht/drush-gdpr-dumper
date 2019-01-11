@@ -1,0 +1,3 @@
+administer gdpr dumper:
+  title: 'Administer gdpr dumper'
+  description: 'Allow to configure the gdpr dumper drush command'

@@ -5,8 +5,8 @@ namespace Drupal\gdpr_dumper\Sql;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Database\Database;
 use Drupal\gdpr_dumper\Event\GdprDumperEvents;
-use Drupal\gdpr_dumper\Event\GdprExpressionsEvent;
 use Drupal\gdpr_dumper\Event\GdprReplacementsEvent;
+use Drupal\gdpr_dumper\GdprDumperEnums;
 use Drush\Drush;
 use Drush\Sql\SqlBase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -61,17 +61,6 @@ class GdprSqlBase extends SqlBase {
     // Fetch module settings.
     $config = \Drupal::config('gdpr_dumper.settings');
 
-    if (empty($options['extra-dump']) || strpos($options['extra-dump'], '--gdpr-expressions') === FALSE) {
-
-      // Dispatch event so the expressions can be altered.
-      $event = new GdprExpressionsEvent($config->get('gdpr_expressions'));
-      $event_dispatcher->dispatch(GdprDumperEvents::GDPR_EXPRESSIONS, $event);
-      // Add the configured GDPR expressions to the command.
-      if($expressions = Json::encode($event->getExpressions())){
-        $options['extra-dump'] .= " --gdpr-expressions='$expressions'";
-      }
-    }
-
     if (empty($options['extra-dump']) || strpos($options['extra-dump'], '--gdpr-replacements') === FALSE) {
       // Dispatch event so the replacements can be altered.
       $event = new GdprReplacementsEvent($config->get('gdpr_replacements'));
@@ -83,10 +72,9 @@ class GdprSqlBase extends SqlBase {
     }
 
     $instance = new $className($dbSpec, $options);
-    $driver_options = isset($config->get('drivers')[$driver]) ? $config->get('drivers')[$driver] : [];
     // Inject config
     $instance->setConfig(Drush::config());
-    $instance->setDriverOptions($driver_options);
+    $instance->setDriverOptions(GdprDumperEnums::driverOptions($driver));
     return $instance;
   }
 
