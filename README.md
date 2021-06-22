@@ -25,12 +25,24 @@ be GDPR compliant YO!
 
 ## Configuration
 
-This module can be configured by editing the `gdpr_dumper.settings.yml` [file](https://github.com/robiningelbrecht/gdpr-dumper/blob/master/config/install/gdpr_dumper.settings.yml).
+In settings.php you can do the override configuration like this:
 
-[druidfi/gdpr-mysqldump](https://github.com/druidfi/gdpr-mysqldump) contains more info about 
-the **gdpr-expressions** and **gdpr-replacement** options. 
+```
+$config['gdpr_dumper.settings']['gdpr_replacements'] = [
+  'users_field_data' => [ // Table
+    'name' => [ // Field
+      'formatter' => 'userName', // Faker formatter
+    ],
+  ],
+];
+```
 
-The provided yml file expects the same structure as explained in the readme above.
+This module can be configured by editing the `gdpr_dumper.settings.yml` [file](config/install/gdpr_dumper.settings.yml).
+
+[druidfi/gdpr-mysqldump](https://github.com/druidfi/gdpr-mysqldump) contains more info about
+the **gdpr-expressions** and **gdpr-replacement** options.
+
+[Faker](https://fakerphp.github.io/) documentation lists all available formatters.
 
 ## Events
 
